@@ -14,14 +14,20 @@ day02 input = unlines $ map answer [p1, p2]
       i = map words $ lines input
 
 parseLineP1 :: Position -> [String] -> Position
-parseLineP1 p ["forward", x] = updatePosition p (read x,  0, 0)
-parseLineP1 p ["down",    x] = updatePosition p (0,  read x, 0)
-parseLineP1 p ["up",      x] = updatePosition p (0, -read x, 0)
+parseLineP1 p [x, y]
+  | x == "forward" = updatePosition p (y',  0, 0)
+  | x == "down"    = updatePosition p (0,  y', 0)
+  | x == "up"      = updatePosition p (0, -y', 0)
+  where
+    y' = read y
 
 parseLineP2 :: Position -> [String] -> Position
-parseLineP2 p ["forward", x] = updatePosition p (read x, read x * aim p, 0)
-parseLineP2 p ["down",    x] = updatePosition p (0, 0,  read x)
-parseLineP2 p ["up",      x] = updatePosition p (0, 0, -read x)
+parseLineP2 p [x, y]
+  | x == "forward" = updatePosition p (y', y' * aim p,   0)
+  | x == "down"    = updatePosition p ( 0,          0,  y')
+  | x == "up"      = updatePosition p ( 0,          0, -y')
+  where
+    y' = read y
 
 updatePosition :: Position -> (Int, Int, Int) -> Position
 updatePosition p (x, y, z) = Position f d a
