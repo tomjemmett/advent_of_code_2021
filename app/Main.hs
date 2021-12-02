@@ -30,6 +30,7 @@ import Day25
 main :: IO ()
 main = do
   runday day01 "inputs/day01.txt"
+  runday day02 "inputs/day02.txt"
 
 runday :: (String -> String) -> String -> IO()
 runday fn file = do
