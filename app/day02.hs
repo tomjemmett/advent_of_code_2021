@@ -2,6 +2,8 @@ module Day02 (
   day02
 ) where
 
+import Common
+
 data Position = Position { forward :: Int, depth :: Int, aim :: Int } deriving (Show)
 
 type PositionUpdate = (Int, Int, Int)
@@ -13,7 +15,7 @@ day02 input = unlines $ map answer [p1, p2]
       p1 = foldl part1 initPosition i
       p2 = foldl part2 initPosition i
       initPosition = Position 0 0 0
-      i = map words $ lines input
+      i = linesWords input
 
 part1 :: Position -> [String] -> Position
 part1 p [x, y] = updatePosition p $ case x of

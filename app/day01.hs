@@ -8,7 +8,7 @@ import Data.List (tails)
 day01 :: String -> String
 day01 input = unlines [p1, p2]
   where
-    i = map read $ lines input
+    i = linesRead input
     p1 = countIncrements 1 i
     p2 = countIncrements 3 i
 
