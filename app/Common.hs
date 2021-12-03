@@ -1,10 +1,13 @@
 module Common (
   countTrue,
   linesRead,
-  linesWords
+  linesWords,
+  bitStringToInt,
+  bitsToInt
 ) where
 
 import Data.Foldable (toList)
+import Data.Char (digitToInt)
 
 countTrue :: Foldable f => (a -> Bool) -> f a -> Int
 countTrue p = length . filter p . toList
@@ -14,3 +17,9 @@ linesRead = map read . lines
 
 linesWords :: String -> [[String]]
 linesWords = map words . lines
+
+bitStringToInt :: String -> Int
+bitStringToInt = bitsToInt . map digitToInt
+
+bitsToInt :: [Int] -> Int
+bitsToInt = sum . zipWith (*) (map (2^) [0..]) . reverse
