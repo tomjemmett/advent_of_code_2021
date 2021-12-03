@@ -1,4 +1,5 @@
 module Common (
+  AOCSolution,
   countTrue,
   linesRead,
   linesWords,
@@ -8,6 +9,8 @@ module Common (
 
 import Data.Foldable (toList)
 import Data.Char (digitToInt)
+
+type AOCSolution = String -> [String]
 
 countTrue :: Foldable f => (a -> Bool) -> f a -> Int
 countTrue p = length . filter p . toList

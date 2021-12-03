@@ -5,8 +5,8 @@ module Day01 (
 import Common
 import Data.List (tails)
 
-day01 :: String -> String
-day01 input = unlines $ countIncrements <$> [1, 3] <*> pure (linesRead input)
+day01 :: AOCSolution
+day01 input = countIncrements <$> [1, 3] <*> pure (linesRead input)
 
 -- check that each item in the list is less than the nth next item
 -- for part 1, n = 1 (the next item)

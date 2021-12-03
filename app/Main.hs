@@ -33,7 +33,7 @@ main = do
   runday day02 "inputs/day02.txt"
   runday day03 "inputs/day03.txt"
 
-runday :: (String -> String) -> String -> IO()
+runday :: (String -> [String]) -> String -> IO()
 runday fn file = do
   withFile file ReadMode (\h -> do
     putStrLn $ replicate 80 '-'
@@ -41,5 +41,5 @@ runday fn file = do
     putStrLn $ "Day: " ++ show day
 
     contents <- hGetContents h
-    putStr $ fn contents
+    putStr $ unlines $ fn contents
     putStrLn "")

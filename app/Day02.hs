@@ -8,8 +8,8 @@ data Position = Position { forward :: Int, depth :: Int, aim :: Int } deriving (
 
 type PositionUpdate = (Int, Int, Int)
 
-day02 :: String -> String
-day02 input = unlines $ map answer [p1, p2]
+day02 :: AOCSolution
+day02 input = map answer [p1, p2]
   where
     answer p = show $ forward p * depth p
     p1 = foldl part1 initPosition i

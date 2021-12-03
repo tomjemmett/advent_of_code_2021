@@ -22,8 +22,8 @@ testInput = ["00100",
              "00010",
              "01010"]
 
-day03 :: String -> String
-day03 input = unlines $ [p1, p2] <*> pure i
+day03 :: AOCSolution
+day03 input = [p1, p2] <*> pure i
   where
     i = lines input
     p1 = runPart (const id)                    -- we don't want to filter in part 1, so we can use the constant identity

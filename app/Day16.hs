@@ -4,5 +4,5 @@ module Day16 (
 
 import Common
 
-day16 :: String -> String
+day16 :: AOCSolution
 day16 = undefined
