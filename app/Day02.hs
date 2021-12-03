@@ -9,13 +9,10 @@ data Position = Position { forward :: Int, depth :: Int, aim :: Int } deriving (
 type PositionUpdate = (Int, Int, Int)
 
 day02 :: AOCSolution
-day02 input = map answer [p1, p2]
+day02 input = answer . f <$> [part1, part2]
   where
     answer p = show $ forward p * depth p
-    p1 = foldl part1 initPosition i
-    p2 = foldl part2 initPosition i
-    initPosition = Position 0 0 0
-    i = linesWords input
+    f p = foldl p (Position 0 0 0) $ linesWords input
 
 part1 :: Position -> [String] -> Position
 part1 p [x, y] = updatePosition p $ case x of
