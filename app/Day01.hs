@@ -6,11 +6,7 @@ import Common
 import Data.List (tails)
 
 day01 :: String -> String
-day01 input = unlines [p1, p2]
-  where
-    i = linesRead input
-    p1 = countIncrements 1 i
-    p2 = countIncrements 3 i
+day01 input = unlines $ countIncrements <$> [1, 3] <*> pure (linesRead input)
 
 -- check that each item in the list is less than the nth next item
 -- for part 1, n = 1 (the next item)
