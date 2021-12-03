@@ -30,19 +30,23 @@ part1 input = show $ gamma input * epsillon input
   where
     gamma = bitStringToInt . p1 (>) ""
     epsillon = bitStringToInt . p1 (<=) ""
-    p1 = d3 (const id)
+    p1 = d3 (const id) -- we don't want to filter in part 1, so we can use the constant identity
 
 part2 :: [String] -> String
 part2 input = show $ oxygen input * co2Scruber input
   where
     oxygen = bitStringToInt . p2 (>) ""
     co2Scruber = bitStringToInt . p2 (<=) ""
-    p2 = d3 (\b -> filter ((== b) . head))
+    p2 = d3 (\b -> filter ((== b) . head)) -- filter where the first item in the input matches the bigger item
 
-d3 :: (Char -> [String] -> [String]) -> (Int -> Int -> Bool) -> String -> [String] -> String
-d3 _ _ c ("":xs) = c -- exhausted length of input strings
-d3 _ _ c [i] = c ++ i -- single element, return it
-d3 stepFilter comparer c input = d3 stepFilter comparer c'  nextInput -- recursively call
+d3 :: (Char -> [String] -> [String]) -> -- a function which will filter the input list
+  (Int -> Int -> Bool) ->               -- a comparison function, should be either (>) or (<=)
+  String ->                             -- a string containing the current match (first iteration should be "")
+  [String] ->                           -- the input string, where each item is a line from the file
+  String                                -- return a string of the result
+d3 _ _ c ("":xs) = c  -- exhausted length of input strings, return the current match
+d3 _ _ c [i] = c ++ i -- single element, return the current match with the single item
+d3 stepFilter comparer c input = d3 stepFilter comparer c' nextInput -- recursively call
   where
     -- consider just the first character
     firstChars = map head input
