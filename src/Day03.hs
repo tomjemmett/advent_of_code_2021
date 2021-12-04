@@ -9,19 +9,6 @@ type Input = [String]
 type StepFilter = Char -> [String] -> [String]
 type Comparer = (Int -> Int -> Bool)
 
-testInput = ["00100",
-             "11110",
-             "10110",
-             "10111",
-             "10101",
-             "01111",
-             "00111",
-             "11100",
-             "10000",
-             "11001",
-             "00010",
-             "01010"]
-
 day03 :: AOCSolution
 day03 input = [p1, p2] <*> pure i
   where

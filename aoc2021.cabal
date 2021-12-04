@@ -66,3 +66,19 @@ executable aoc2021
     build-depends:
         aoc2021
     hs-source-dirs:   app
+
+test-suite spec
+    import:           shared-properties
+    type:             exitcode-stdio-1.0
+    other-modules:
+        Day01Spec
+        Day02Spec
+        Day03Spec
+        Day04Spec
+        SpecHelper
+    hs-source-dirs:   test
+    main-is:          Spec.hs
+    build-depends:
+        hspec >= 2.7,
+        hspec-discover >= 2.7,
+        aoc2021
