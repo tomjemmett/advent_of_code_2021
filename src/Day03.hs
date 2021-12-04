@@ -37,7 +37,7 @@ d3 stepFilter c comparer input = d3 stepFilter c' comparer nextInput -- recursiv
     firstChars = map head input
     -- now find the number of 0's and 1's
     zeros = length $ filter (== '0') firstChars
-    ones  = length $ filter (== '1') firstChars
+    ones  = length firstChars - zeros
     -- which is bigger?
     bigger = if comparer zeros ones then '0' else '1'
     f = stepFilter bigger input
