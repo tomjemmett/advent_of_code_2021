@@ -5,4 +5,4 @@ module Day25 (
 import Common
 
 day25 :: AOCSolution
-day25 = undefined
+day25 = const ["", ""]
