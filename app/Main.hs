@@ -32,6 +32,7 @@ main = do
   runday day01 "inputs/day01.txt"
   runday day02 "inputs/day02.txt"
   runday day03 "inputs/day03.txt"
+  runday day04 "inputs/day04.txt"
 
 runday :: (String -> [String]) -> String -> IO()
 runday fn file = do
