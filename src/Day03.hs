@@ -22,7 +22,9 @@ runPart stepFilter input = show $ -- turn Int into a string
   map bitStringToInt $            -- convert the bit strings to integers
   -- create two versions of our day 3 function for > and <= as the comparer argument
   -- we can use and Applicative to run each function on the LHS with the input (which needs to be wrapped in pure)
-  map (d3 stepFilter "") [(>), (<=)] <*> pure input
+  d3 stepFilter "" <$>
+  [(>), (<=)] <*>
+  pure input
 
 d3 :: StepFilter -> -- a function which will filter the input list
   String         -> -- a string containing the current match (first iteration should be "")
