@@ -3,7 +3,8 @@ module Day04 (
 ) where
 
 import Common
-import Data.List (transpose)
+import Data.Function (on)
+import Data.List (transpose, groupBy, sortBy)
 import Data.List.Split (splitOn)
 import Data.Maybe (listToMaybe)
 
@@ -68,10 +69,9 @@ d4 ((n:nums), boards) = case checkBingo of
   where
     -- find the next iteration of the boards afting calling "n"
     nextBoards = callNumber n boards
-    -- filter the boards to find the zero/one board that has called bingo
-    isBingo  = filter ((==) 0 . minimum . map length) nextBoards
-    -- and all the other boards
-    notBingo = filter ((/=) 0 . minimum . map length) nextBoards
+    -- create a function to filter the boards, either for when we have bingo, or when we don't have bingo
+    filterBoards comp = filter (comp 0 . minimum . map length) nextBoards
+    [isBingo, notBingo] = filterBoards <$> [(==), (/=)]
     -- turn isBingo into a Maybe monad
     checkBingo = listToMaybe isBingo
     -- function to calculate the results: we flatten the list of lists into a single list,
