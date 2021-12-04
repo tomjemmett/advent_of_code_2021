@@ -60,6 +60,4 @@ d4 ((n:nums), boards) = case checkBingo of
 
 -- when a number is called, filter out that number from a board
 callNumber :: Int -> Boards -> Boards
-callNumber n boards = map f boards
-  where
-    f ls = map (filter (/= n)) ls
+callNumber n boards = map2 (filter (/= n)) boards
