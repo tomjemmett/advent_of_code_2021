@@ -49,8 +49,7 @@ d4 ((n:nums), boards) = case checkBingo of
     -- find the next iteration of the boards afting calling "n"
     nextBoards = callNumber n boards
     -- create a function to filter the boards, either for when we have bingo, or when we don't have bingo
-    filterBoards comp = filter (comp 0 . minimum . map length) nextBoards
-    [isBingo, notBingo] = filterBoards <$> [(==), (/=)]
+    [isBingo, notBingo] = (\c -> filter (c 0 . minimum . map length) nextBoards) <$> [(==), (/=)]
     -- turn isBingo into a Maybe monad
     checkBingo = listToMaybe isBingo
     -- function to calculate the results: we flatten the list of lists into a single list,
