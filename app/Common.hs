@@ -4,7 +4,8 @@ module Common (
   linesRead,
   linesWords,
   bitStringToInt,
-  bitsToInt
+  bitsToInt,
+  numbersStringToInt
 ) where
 
 import Data.Foldable (toList)
@@ -26,3 +27,6 @@ bitStringToInt = bitsToInt . map digitToInt
 
 bitsToInt :: [Int] -> Int
 bitsToInt = sum . zipWith (*) (map (2^) [0..]) . reverse
+
+numbersStringToInt :: (String -> [String]) -> String -> [Int]
+numbersStringToInt split = map read . split

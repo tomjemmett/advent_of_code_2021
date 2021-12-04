@@ -8,8 +8,8 @@ import Data.List (transpose, groupBy, sortBy)
 import Data.List.Split (splitOn)
 import Data.Maybe (listToMaybe)
 
-type Numbers = [String]
-type Line    = [String]
+type Numbers = [Int]
+type Line    = [Int]
 type Board   = [Line]
 type Boards  = [Board]
 type Results = [Int]
@@ -52,8 +52,8 @@ parseInput :: String -> (Numbers, Boards)
 parseInput input = (n, zipWith (++) bs cs)
   where
     i  = splitOn "\n\n" input
-    n  = splitOn "," $ head i
-    bs = map (filter (/= []) . map words . splitOn "\n") $ tail i
+    n  = numbersStringToInt (splitOn ",") $ head i
+    bs = map (filter (/= []) . map (numbersStringToInt words) . splitOn "\n") $ tail i
     cs = map transpose bs
 
 -- out function to play bingo
@@ -75,14 +75,13 @@ d4 ((n:nums), boards) = case checkBingo of
     -- turn isBingo into a Maybe monad
     checkBingo = listToMaybe isBingo
     -- function to calculate the results: we flatten the list of lists into a single list,
-    -- convert the numbers to integers
     -- sum the results
     -- then divide by 2 (as we double the list to have both the rows and columns, we count everything twice)
     -- finally we multiple by the current "n"
-    result = (*) (read n) . flip div 2 . sum . map read . concat
+    result = (* n) . flip div 2 . sum . concat
 
 -- when a number is called, filter out that number from a board
-callNumber :: String -> Boards -> Boards
+callNumber :: Int -> Boards -> Boards
 callNumber n boards = map f boards
   where
     f ls = map (filter (/= n)) ls
