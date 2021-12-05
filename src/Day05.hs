@@ -28,30 +28,27 @@ d5 = length .                -- get the length of remaining items in the list, o
   foldl processLine M.empty  -- use an empty map to store our grid, then fold over the input (lines) to update the grid
 
 processLine :: Grid -> Line -> Grid
-processLine grid line = grid'
+processLine grid = foldl processPoint grid . lineToPoints
   where
-    grid' = foldl processPoint grid points          -- process all of the points on this line
-    points = lineToPoints line                      -- extract the points on this line
-    processPoint = flip $ flip (M.insertWith (+)) 1 -- update the grid by incrementing the value at that position
+    -- update the grid by incrementing the value at the given position. if the positions isn't already in the map, then
+    -- a value of 1 is inserted
+    processPoint = flip $ flip (M.insertWith (+)) 1
 
 -- convert a Line to the set of Points on that line
 lineToPoints :: Line -> Points
-lineToPoints (ab@(a, b), cd@(c, d))
-  | ab == cd  = [ab] -- ab and cd are the same point, so just return it
-  -- the following cases will handle where the cases where:
-  -- * first direction isn't changed
-  -- * second direction isn't changed
-  -- * both directions change (diagonal)
-  | a == c    = ab : lineToPoints ((a, f b d), cd)
-  | b == d    = ab : lineToPoints ((f a c, b), cd)
-  | otherwise = ab : lineToPoints ((f a c, f b d), cd)
-  -- this function will either increment or decrement the first value to make it approach the second value
-  where f x y = (if x < y then succ else pred) x
+lineToPoints (ab@(a, b), cd@(c, d)) = ab : if ab == cd
+  then []                                -- when ab == cd, nothing more to do
+  else lineToPoints ((f a c, f b d), cd) -- use the f function below to alter a and b to apprach c and d
+  where
+    f x y
+      | x < y = succ x -- move a/b closer to c/d by incrementing
+      | x > y = pred x -- move a/b closer to c/d by decrementing
+      | otherwise = x  -- a/b has reached c/d, so stay there
 
+-- use parsec to parse our input into the Lines data type
 parseInput :: Applicative f => String -> f Lines
 parseInput = pure . map (fromRight ((0,0), (0,0)) . P.parse p "") . lines
   where
-    f [a, b, c, d] = ((a, b), (c, d))
     p :: P.CharParser () Line
     p = do
       a <- P.many1 P.digit -- read 1 or more digits
@@ -61,4 +58,7 @@ parseInput = pure . map (fromRight ((0,0), (0,0)) . P.parse p "") . lines
       c <- P.many1 P.digit -- read 1 or more digits
       P.char ','           -- comma is ignored
       d <- P.many1 P.digit -- read 1 or more digits
-      return $ f $ map read [a, b, c, d]
+      return $ (newPoint a b, newPoint c d)
+
+newPoint :: String -> String -> Point
+newPoint x y = (read x, read y)
