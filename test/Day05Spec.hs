@@ -17,11 +17,9 @@ testInput = unlines [
 spec :: Spec
 spec = describe "Day 05" $ do
   it "Sample" $ do
-    day05 testInput `shouldBe` ["5", ""]
+    day05 testInput `shouldBe` ["5", "12"]
 
-  {-
   it "Actual" $ do
     withFile "inputs/day05.txt" ReadMode (\h -> do
       actualInput <- hGetContents h
-      day05 actualInput `shouldBe` ["",""])
-  -}
+      day05 actualInput `shouldBe` ["6856","20666"])

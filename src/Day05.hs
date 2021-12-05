@@ -13,7 +13,7 @@ type Line  = (Point, Point)
 type Lines = [Line]
 
 day05 :: AOCSolution
-day05 input = [p1 i, ""]
+day05 input = [p1 i, p2 i]
   where
     i = parseInput input
 
@@ -36,6 +36,10 @@ p1 lines = show $ length $ filter((>= 2)) $ M.elems grid
     lines' = filter (\((a, b), (c, d)) -> a == c || b == d) lines
     grid = foldl processLine makeGrid lines'
 
+p2 lines = show $ length $ filter((>= 2)) $ M.elems grid
+  where
+    grid = foldl processLine makeGrid lines
+
 processLine grid line = grid'
   where
     grid' = foldl processPoint grid points
@@ -47,4 +51,8 @@ lineToPoints (ab@(a, b), cd@(c, d))
   | a == c && b >  d = ab : lineToPoints ((a, b - 1), cd)
   | b == d && a <  c = ab : lineToPoints ((a + 1, b), cd)
   | b == d && a >  c = ab : lineToPoints ((a - 1, b), cd)
+  | a <  c && b <  d = ab : lineToPoints ((a + 1, b + 1), cd)
+  | a <  c && b >  d = ab : lineToPoints ((a + 1, b - 1), cd)
+  | a >  c && b <  d = ab : lineToPoints ((a - 1, b + 1), cd)
+  | a >  c && b >  d = ab : lineToPoints ((a - 1, b - 1), cd)
   | otherwise        = [ab]
