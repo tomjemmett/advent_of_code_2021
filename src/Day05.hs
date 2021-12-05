@@ -3,7 +3,6 @@ module Day05 (
 ) where
 
 import Common
-import Data.Char (digitToInt)
 import qualified Data.Map as M
 import Data.Map ((!))
 import Data.List.Split (splitOn)
@@ -15,12 +14,10 @@ type Lines  = [Line]
 type Grid   = M.Map Point Int
 
 day05 :: AOCSolution
-day05 input = [p1 i, p2 i]
+day05 input = show <$> d5 <$> ([p1, p2] <*> pure (parseInput input))
   where
-    i = parseInput input
-
-makeGrid :: Grid
-makeGrid = M.empty
+    p1 = filter (\((a, b), (c, d)) -> a == c || b == d)
+    p2 = id
 
 parseInput :: String -> Lines
 parseInput = map parseLine . filter (/= "") . lines
@@ -29,13 +26,11 @@ parseInput = map parseLine . filter (/= "") . lines
       where
         [[a, b], [c, d]] = map2 read . map (splitOn ",") $ splitOn " -> " l
 
-p1 :: Lines -> String
-p1 = p2 . filter (\((a, b), (c, d)) -> a == c || b == d)
-
-p2 :: Lines -> String
-p2 lines = show $ length $ filter((>= 2)) $ M.elems grid
-  where
-    grid = foldl processLine makeGrid lines
+d5 :: Lines -> Int
+d5 = length .
+  filter((>= 2)) .
+  M.elems .
+  foldl processLine M.empty
 
 processLine :: Grid -> Line -> Grid
 processLine grid line = grid'
@@ -46,12 +41,8 @@ processLine grid line = grid'
 
 lineToPoints :: Line -> Points
 lineToPoints (ab@(a, b), cd@(c, d))
-  | a == c && b <  d = ab : lineToPoints ((a, b + 1), cd)
-  | a == c && b >  d = ab : lineToPoints ((a, b - 1), cd)
-  | b == d && a <  c = ab : lineToPoints ((a + 1, b), cd)
-  | b == d && a >  c = ab : lineToPoints ((a - 1, b), cd)
-  | a <  c && b <  d = ab : lineToPoints ((a + 1, b + 1), cd)
-  | a <  c && b >  d = ab : lineToPoints ((a + 1, b - 1), cd)
-  | a >  c && b <  d = ab : lineToPoints ((a - 1, b + 1), cd)
-  | a >  c && b >  d = ab : lineToPoints ((a - 1, b - 1), cd)
-  | otherwise        = [ab]
+  | a == c && b == d = [ab]
+  | a == c           = ab : lineToPoints ((a, f b d), cd)
+  | b == d           = ab : lineToPoints ((f a c, b), cd)
+  | otherwise        = ab : lineToPoints ((f a c, f b d), cd)
+  where f x y = (if x < y then succ else pred) x
