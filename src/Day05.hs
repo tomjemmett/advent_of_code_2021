@@ -1,6 +1,10 @@
+{-
 module Day05 (
   day05
 ) where
+-}
+
+module Day05 where
 
 import Common
 import Data.Either (fromRight)
@@ -47,18 +51,12 @@ lineToPoints (ab@(a, b), cd@(c, d)) = ab : if ab == cd
 
 -- use parsec to parse our input into the Lines data type
 parseInput :: Applicative f => String -> f Lines
-parseInput = pure . map (fromRight ((0,0), (0,0)) . P.parse p "") . lines
+parseInput = pure . map f . lines
   where
-    p :: P.CharParser () Line
-    p = do
-      a <- P.many1 P.digit -- read 1 or more digits
-      P.char ','           -- comma is ignored
-      b <- P.many1 P.digit -- read 1 or more digits
-      P.string " -> "      -- arrow is ignored
-      c <- P.many1 P.digit -- read 1 or more digits
-      P.char ','           -- comma is ignored
-      d <- P.many1 P.digit -- read 1 or more digits
-      return $ (newPoint a b, newPoint c d)
+    f x = case P.parse pLine "" x of
+      Right [[a, b], [c, d]] -> (newPoint a b, newPoint c d)
+    pLine :: P.CharParser () [[String]]
+    pLine = P.many1 P.digit `P.sepBy` (P.char ',') `P.sepBy` (P.string " -> ")
 
 newPoint :: String -> String -> Point
 newPoint x y = (read x, read y)
