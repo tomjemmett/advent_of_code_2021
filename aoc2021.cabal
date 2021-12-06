@@ -22,6 +22,7 @@ common shared-properties
         containers,
         parsec,
         split
+    default-extensions: FlexibleContexts
     default-language: Haskell2010
 
 library
