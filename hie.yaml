@@ -1,82 +1,10 @@
 cradle:
   cabal:
+    - path: "src"
+      component: "lib:aoc2021"
+
     - path: "app/Main.hs"
       component: "aoc2021:exe:aoc2021"
 
-    - path: "app/Common.hs"
-      component: "aoc2021:exe:aoc2021"
-
-    - path: "app/Day01.hs"
-      component: "aoc2021:exe:aoc2021"
-
-    - path: "app/Day02.hs"
-      component: "aoc2021:exe:aoc2021"
-
-    - path: "app/Day03.hs"
-      component: "aoc2021:exe:aoc2021"
-
-    - path: "app/Day04.hs"
-      component: "aoc2021:exe:aoc2021"
-
-    - path: "app/Day05.hs"
-      component: "aoc2021:exe:aoc2021"
-
-    - path: "app/Day06.hs"
-      component: "aoc2021:exe:aoc2021"
-
-    - path: "app/Day07.hs"
-      component: "aoc2021:exe:aoc2021"
-
-    - path: "app/Day08.hs"
-      component: "aoc2021:exe:aoc2021"
-
-    - path: "app/Day09.hs"
-      component: "aoc2021:exe:aoc2021"
-
-    - path: "app/Day10.hs"
-      component: "aoc2021:exe:aoc2021"
-
-    - path: "app/Day11.hs"
-      component: "aoc2021:exe:aoc2021"
-
-    - path: "app/Day12.hs"
-      component: "aoc2021:exe:aoc2021"
-
-    - path: "app/Day13.hs"
-      component: "aoc2021:exe:aoc2021"
-
-    - path: "app/Day14.hs"
-      component: "aoc2021:exe:aoc2021"
-
-    - path: "app/Day15.hs"
-      component: "aoc2021:exe:aoc2021"
-
-    - path: "app/Day16.hs"
-      component: "aoc2021:exe:aoc2021"
-
-    - path: "app/Day17.hs"
-      component: "aoc2021:exe:aoc2021"
-
-    - path: "app/Day18.hs"
-      component: "aoc2021:exe:aoc2021"
-
-    - path: "app/Day19.hs"
-      component: "aoc2021:exe:aoc2021"
-
-    - path: "app/Day20.hs"
-      component: "aoc2021:exe:aoc2021"
-
-    - path: "app/Day21.hs"
-      component: "aoc2021:exe:aoc2021"
-
-    - path: "app/Day22.hs"
-      component: "aoc2021:exe:aoc2021"
-
-    - path: "app/Day23.hs"
-      component: "aoc2021:exe:aoc2021"
-
-    - path: "app/Day24.hs"
-      component: "aoc2021:exe:aoc2021"
-
-    - path: "app/Day25.hs"
-      component: "aoc2021:exe:aoc2021"
+    - path: "test"
+      component: "aoc2021:test:spec"

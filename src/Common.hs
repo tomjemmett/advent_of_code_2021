@@ -3,6 +3,7 @@ module Common (
   countTrue,
   linesRead,
   linesWords,
+  commaSeparatedInts,
   bitStringToInt,
   bitsToInt,
   numbersStringToInt,
@@ -11,6 +12,7 @@ module Common (
 
 import Data.Foldable (toList)
 import Data.Char (digitToInt)
+import Data.List.Split (splitOn)
 
 type AOCSolution = String -> [String]
 
@@ -22,6 +24,9 @@ linesRead = map read . lines
 
 linesWords :: String -> [[String]]
 linesWords = map words . lines
+
+commaSeparatedInts :: String -> [Int]
+commaSeparatedInts = map read . splitOn ","
 
 bitStringToInt :: String -> Int
 bitStringToInt = bitsToInt . map digitToInt
