@@ -1,19 +1,11 @@
-module Common (
-  AOCSolution,
-  countTrue,
-  linesRead,
-  linesWords,
-  numbersStringToInt,
-  wordSeparatedInts,
-  commaSeparatedInts,
-  bitStringToInt,
-  bitsToInt,
-  map2
-) where
+module Common where
 
 import Data.Foldable (toList)
 import Data.Char (digitToInt)
 import Data.List.Split (splitOn)
+
+import qualified Text.Parsec as P
+import Text.Parsec.String (Parser)
 
 type AOCSolution = String -> [String]
 
@@ -43,3 +35,9 @@ bitsToInt = sum . zipWith (*) (map (2^) [0..]) . reverse
 
 map2 :: (a -> b) -> [[a]] -> [[b]]
 map2 f = map (map f)
+
+parse :: Parser a -> String -> Either P.ParseError a
+parse = flip P.parse ""
+
+number :: Parser Int
+number = read <$> P.many1 P.digit

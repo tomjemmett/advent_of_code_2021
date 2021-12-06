@@ -11,7 +11,7 @@ import Data.Either (fromRight)
 import Data.List.Split (splitOn)
 import qualified Data.Map as M
 import Data.Map ((!))
-import Text.Parsec (parse, many1, digit, string, sepBy, (<|>))
+import Text.Parsec (many1, oneOf, sepBy)
 
 type Point  = (Int, Int)
 type Points = [Point]
@@ -51,7 +51,7 @@ lineToPoints (ab@(a, b), cd@(c, d)) = ab : if ab == cd
 
 -- use parsec to parse our input into the Lines data type
 parseInput :: Applicative f => String -> f Lines
-parseInput = pure . map f . lines
+parseInput = pure . map (f . parse p) . lines
   where
-    f x = case p x of Right [a, b, c, d] -> ((a, b), (c, d))
-    p = parse ((read <$> many1 digit) `sepBy` (string "," <|> string " -> ")) ""
+    f = \case Right [a, b, c, d] -> ((a, b), (c, d))
+    p = number `sepBy` (many1 . oneOf) ", ->"
