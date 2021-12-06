@@ -11,7 +11,7 @@ import Data.Either (fromRight)
 import Data.List.Split (splitOn)
 import qualified Data.Map as M
 import Data.Map ((!))
-import qualified Text.ParserCombinators.Parsec as P
+import Text.Parsec (parse, many1, digit, string, sepBy, (<|>))
 
 type Point  = (Int, Int)
 type Points = [Point]
@@ -27,7 +27,7 @@ day05 input = fmap (show . d5) $ [f, id] <*> parseInput input
 
 d5 :: Lines -> Int
 d5 = length .                -- get the length of remaining items in the list, our result
-  filter((>= 2)) .           -- remove points from our "grid" which were matched less than twice
+  filter(>= 2) .           -- remove points from our "grid" which were matched less than twice
   M.elems .                  -- get the elements from the map
   foldl processLine M.empty  -- use an empty map to store our grid, then fold over the input (lines) to update the grid
 
@@ -53,10 +53,5 @@ lineToPoints (ab@(a, b), cd@(c, d)) = ab : if ab == cd
 parseInput :: Applicative f => String -> f Lines
 parseInput = pure . map f . lines
   where
-    f x = case P.parse pLine "" x of
-      Right [[a, b], [c, d]] -> (newPoint a b, newPoint c d)
-    pLine :: P.CharParser () [[String]]
-    pLine = P.many1 P.digit `P.sepBy` (P.char ',') `P.sepBy` (P.string " -> ")
-
-newPoint :: String -> String -> Point
-newPoint x y = (read x, read y)
+    f x = case p x of Right [a, b, c, d] -> ((a, b), (c, d))
+    p = parse ((read <$> many1 digit) `sepBy` (string "," <|> string " -> ")) ""
