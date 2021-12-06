@@ -3,10 +3,11 @@ module Common (
   countTrue,
   linesRead,
   linesWords,
+  numbersStringToInt,
+  wordSeparatedInts,
   commaSeparatedInts,
   bitStringToInt,
   bitsToInt,
-  numbersStringToInt,
   map2
 ) where
 
@@ -25,17 +26,20 @@ linesRead = map read . lines
 linesWords :: String -> [[String]]
 linesWords = map words . lines
 
+numbersStringToInt :: (String -> [String]) -> String -> [Int]
+numbersStringToInt split = map read . split
+
+wordSeparatedInts :: String -> [Int]
+wordSeparatedInts = numbersStringToInt words
+
 commaSeparatedInts :: String -> [Int]
-commaSeparatedInts = map read . splitOn ","
+commaSeparatedInts = numbersStringToInt (splitOn ",")
 
 bitStringToInt :: String -> Int
 bitStringToInt = bitsToInt . map digitToInt
 
 bitsToInt :: [Int] -> Int
 bitsToInt = sum . zipWith (*) (map (2^) [0..]) . reverse
-
-numbersStringToInt :: (String -> [String]) -> String -> [Int]
-numbersStringToInt split = map read . split
 
 map2 :: (a -> b) -> [[a]] -> [[b]]
 map2 f = map (map f)
