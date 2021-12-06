@@ -32,7 +32,7 @@ parseInput input = (n, zipWith (++) bs cs)
   where
     i  = splitOn "\n\n" input
     n  = numbersStringToInt (splitOn ",") $ head i
-    bs = map (filter (/= []) . map (numbersStringToInt words) . splitOn "\n") $ tail i
+    bs = map (filter (/= []) . map wordSeparatedInts . splitOn "\n") $ tail i
     cs = map transpose bs
 
 -- out function to play bingo
@@ -40,7 +40,7 @@ d4 :: (Numbers, Boards) -> Results
 -- base case: we have played all of the cards
 d4 (_, []) = []
 -- case where we still have cards to play
-d4 ((n:nums), boards) = case checkBingo of
+d4 (n:nums, boards) = case checkBingo of
   -- one of the cards has called bingo, return the results for that and continue solving
   Just b -> result b : d4 (nums, notBingo)
   -- no cards have called bingo, so keep playing
@@ -60,4 +60,4 @@ d4 ((n:nums), boards) = case checkBingo of
 
 -- when a number is called, filter out that number from a board
 callNumber :: Int -> Boards -> Boards
-callNumber n boards = map2 (filter (/= n)) boards
+callNumber n = map2 (filter (/= n))
