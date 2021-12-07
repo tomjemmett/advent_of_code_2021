@@ -25,6 +25,7 @@ common shared-properties
     default-extensions:
         FlexibleContexts
         LambdaCase
+        TypeApplications
     default-language: Haskell2010
 
 library
