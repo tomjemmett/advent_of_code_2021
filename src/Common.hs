@@ -39,5 +39,12 @@ map2 f = map (map f)
 parse :: Parser a -> String -> Either P.ParseError a
 parse = flip P.parse ""
 
+-- assumes that the parser always succeeds, it applies a function f to the Right value from the parser
+parse' :: Parser a -> (a -> b) -> String -> b
+parse' p f s = case parse p s of Right x -> f x
+
 number :: Parser Int
 number = read <$> P.many1 P.digit
+
+numbers :: String -> Parser [Int]
+numbers s = number `P.sepBy` (P.many1 . P.oneOf) s
