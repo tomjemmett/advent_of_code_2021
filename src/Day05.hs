@@ -27,7 +27,7 @@ day05 input = fmap (show . d5) $ [f, id] <*> parseInput input
 
 d5 :: Lines -> Int
 d5 = length .                -- get the length of remaining items in the list, our result
-  filter(>= 2) .           -- remove points from our "grid" which were matched less than twice
+  filter(>= 2) .             -- remove points from our "grid" which were matched less than twice
   M.elems .                  -- get the elements from the map
   foldl processLine M.empty  -- use an empty map to store our grid, then fold over the input (lines) to update the grid
 
@@ -51,7 +51,7 @@ lineToPoints (ab@(a, b), cd@(c, d)) = ab : if ab == cd
 
 -- use parsec to parse our input into the Lines data type
 parseInput :: Applicative f => String -> f Lines
-parseInput = pure . map (f . parse p) . lines
+parseInput = pure . map (parse' p f) . lines
   where
-    f = \case Right [a, b, c, d] -> ((a, b), (c, d))
-    p = number `sepBy` (many1 . oneOf) ", ->"
+    f [a, b, c, d] = ((a, b), (c, d))
+    p = numbers ", ->"
