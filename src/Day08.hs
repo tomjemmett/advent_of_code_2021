@@ -31,20 +31,21 @@ part2 n [a, b] = n + foldl (\x y -> x * 10 + (m ! y)) 0 b
     [a1, a7, a4, a8] = head <$> [l2, l3, l4, l7]
     -- first, consider what's same between a1 and a7, that should tell us what is 'a'
     pa = a7 \\ a1
-    -- 'c' and 'f' can be found from the intersection of a1 and a7
-    pcf = a1 `intersect` a7
-    -- we can find 3 now: it's going to be the only 5 length with an 'f'
-    a3 = hfilter (\x -> length (x \\ pcf) == 3) l5
-    -- which leads to 'g' and 'd'
-    pg = a3 \\ (a4 `union` a7)
-    pd = a3 \\ (a7 `union` pg)
-    -- we can now solve 'e' and find 2 and 5
-    pe = hfilter (not . null) $ map (\\ (foldr1 union [a4, pa, pd, pg])) (l5 \\ [a3])
+    -- 'g' can be found: it will be the only remaining character in 3 and 5 if we remove 4 and 'a'
+    pg = hfilter ((== 1) . length) $ map (\\ pa `union` a4) l5
+    -- from this, we can construct 9 and find 'e'
+    a9 = sort $ foldl1 union [pa, pg, a4]
+    pe = a8 \\ a9
+    -- 'd' can be found: it will be the only remaining character in 3 if we remove 7 and 'g'
+    pd = foldl1 intersect $ map (\\ a7 `union` pg) l5
+    -- this allows us to reconstruct 3
+    a3 = sort $ foldl1 union [pd, pg, a7]
+    -- 2 is the only one of 2/3/5 with an 'e'
     a2 = hfilter (not . null . intersect pe) l5
+    -- so we can now find 5
     a5 = head $ l5 \\ [a2, a3]
     -- now we can reconstruct the rest
-    a0 = hfilter (null . intersect pd) l6
-    a6 = hfilter (not . null . intersect pe) (l6 \\ [a0])
-    a9 = head $ l6 \\ [a0, a6]
+    a0 = a8 \\ pd
+    a6 = head $ (l6 \\ [a0]) \\ [a9]
     -- create a map so we can easily lookup using b
     m = M.fromList $ zip [a0, a1, a2, a3, a4, a5, a6, a7, a8, a9] [0..]
