@@ -1,9 +1,6 @@
-module Day08 where
-{-  
-(
+module Day08 (
   day08
 ) where
--}
 
 import Common
 import Data.List (sort, sortBy, groupBy, intersect, union, (\\))

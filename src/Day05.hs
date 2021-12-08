@@ -1,11 +1,6 @@
-{-
 module Day05 (
   day05
 ) where
--}
-
-module Day05 where
-
 import Common
 import Data.Either (fromRight)
 import Data.List.Split (splitOn)
