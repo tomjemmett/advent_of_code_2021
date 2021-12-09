@@ -14,6 +14,22 @@ main = do
   runday day07 "inputs/day07.txt"
   runday day08 "inputs/day08.txt"
   runday day09 "inputs/day09.txt"
+  -- runday day10 "inputs/day10.txt"
+  -- runday day11 "inputs/day11.txt"
+  -- runday day12 "inputs/day12.txt"
+  -- runday day13 "inputs/day13.txt"
+  -- runday day14 "inputs/day14.txt"
+  -- runday day15 "inputs/day15.txt"
+  -- runday day16 "inputs/day16.txt"
+  -- runday day17 "inputs/day17.txt"
+  -- runday day18 "inputs/day18.txt"
+  -- runday day19 "inputs/day19.txt"
+  -- runday day20 "inputs/day20.txt"
+  -- runday day21 "inputs/day21.txt"
+  -- runday day22 "inputs/day22.txt"
+  -- runday day23 "inputs/day23.txt"
+  -- runday day24 "inputs/day24.txt"
+  -- runday day25 "inputs/day25.txt"
 
 runday :: (String -> [String]) -> String -> IO()
 runday fn file = do
