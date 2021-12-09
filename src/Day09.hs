@@ -2,6 +2,9 @@ module Day09 (
   day09
 ) where
 
+-- This is a graph problem, which I only realised after solving part 2. A neater solution using Data.Graph:
+--   https://github.com/MatthiasCoppens/AOC2021/blob/main/day09/main.hs
+
 import Common
 import Data.Char (digitToInt)
 import qualified Data.Vector as V
