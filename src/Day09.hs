@@ -14,10 +14,7 @@ type Input = V.Vector (V.Vector Int)
 type Point = (Int, Int)
 
 day09 :: AOCSolution
-day09 input = show <$> [p1, part2 i]
-  where
-    i = parseInput input
-    p1 = sum $ map (part1 i) $ getPoints i
+day09 input = show <$> ([part1, part2] <*> parseInput input)
 
 getPoints :: Input -> [Point]
 getPoints i = [(r, c) | r <- [0..pred rl], c <- [0..pred cl]]
@@ -25,8 +22,8 @@ getPoints i = [(r, c) | r <- [0..pred rl], c <- [0..pred cl]]
     rl = length i
     cl = length (i ! 0)
 
-parseInput :: String -> Input
-parseInput input = V.fromList $ map V.fromList $ map2 digitToInt $ lines input
+parseInput :: Applicative f => String -> f Input
+parseInput input = pure $ V.fromList $ map V.fromList $ map2 digitToInt $ lines input
 
 lookupInInput :: Input -> Point -> Int
 lookupInInput i (r, c) = fromMaybe 9 $ i !? r >>= flip (!?) c
@@ -34,11 +31,15 @@ lookupInInput i (r, c) = fromMaybe 9 $ i !? r >>= flip (!?) c
 getNeighbours :: Point -> [Point]
 getNeighbours (r, c) = [(pred r, c), (succ r, c), (r, pred c), (r, succ c)]
 
-part1 :: Input -> Point -> Int
-part1 i p = if all (> value) neighbours then succ value else 0
+part1 :: Input -> Int
+part1 i = sum $ map p1 points
   where
-    value = lookupInInput i p
-    neighbours = lookupInInput i <$> getNeighbours p
+    points = getPoints i
+    p1 :: Point -> Int
+    p1 p = if all (> value) neighbours then succ value else 0
+      where
+        value = lookupInInput i p
+        neighbours = lookupInInput i <$> getNeighbours p
 
 part2 :: Input -> Int
 part2 i = product $ take 3 $ sortBy (flip compare) $ p2 points []
