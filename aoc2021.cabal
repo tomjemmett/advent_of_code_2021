@@ -20,7 +20,9 @@ common shared-properties
     build-depends:
         base ^>=4.15.0.0,
         containers,
+        unordered-containers,
         parsec,
+        vector,
         split
     default-extensions:
         FlexibleContexts
