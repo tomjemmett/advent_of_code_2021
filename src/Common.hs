@@ -3,11 +3,17 @@ module Common where
 import Data.Foldable (toList)
 import Data.Char (digitToInt)
 import Data.List.Split (splitOn)
+import Data.Maybe (fromMaybe)
+
+import qualified Data.Vector as V
+import Data.Vector ((!), (!?))
 
 import qualified Text.Parsec as P
 import Text.Parsec.String (Parser)
 
 type AOCSolution = String -> [String]
+type Point2d = (Int, Int)
+type Grid2d = V.Vector (V.Vector Int)
 
 countTrue :: Foldable f => (a -> Bool) -> f a -> Int
 countTrue p = length . filter p . toList
@@ -48,3 +54,9 @@ number = read <$> P.many1 P.digit
 
 numbers :: String -> Parser [Int]
 numbers s = number `P.sepBy` (P.many1 . P.oneOf) s
+
+parseGrid2d :: String -> Grid2d
+parseGrid2d = V.fromList . map V.fromList . map2 digitToInt . lines
+
+lookupInGrid2d :: Grid2d -> Point2d -> Int
+lookupInGrid2d i (r, c) = fromMaybe 9 $ i !? r >>= flip (!?) c
