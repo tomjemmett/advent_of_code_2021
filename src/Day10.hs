@@ -8,11 +8,12 @@ import Data.List (sort)
 data NavigationSystem = Complete | Incomplete | Corrupted deriving (Show, Eq)
 
 day10 :: AOCSolution
-day10 input = show <$> [p1, p2]
+day10 input = show <$> ([p1, p2] <*> pure i)
   where
     i = map (parseLine "") $ lines input
-    p1 = sum $           map snd $ filter ((== Corrupted ) . fst) i
-    p2 = head $ median $ map snd $ filter ((== Incomplete) . fst) i
+    f s x = s . map snd . filter ((== x) . fst)
+    p1 = f sum Corrupted
+    p2 = f (head . median) Incomplete
 
 parseLine :: String -> String -> (NavigationSystem, Int)
 parseLine [] [] = (Complete, 0)
