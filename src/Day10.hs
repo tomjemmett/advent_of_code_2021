@@ -4,24 +4,27 @@ module Day10 (
 
 import Common
 import Data.List (sort)
+import Control.Monad (foldM)
 
-data NavigationSystem = Complete | Incomplete | Corrupted deriving (Show, Eq)
+data NavigationSystem = Incomplete | Corrupted deriving (Show, Eq)
 
 day10 :: AOCSolution
 day10 input = map show $ f <$> [(sum, Corrupted), (head . median, Incomplete)] <*> pure i
   where
-    i = map (parseLine "") $ lines input
+    i = map parseLine $ lines input
     f (s, x) = s . map snd . filter ((== x) . fst)
 
-parseLine :: String -> String -> (NavigationSystem, Int)
-parseLine [] [] = (Complete, 0)
-parseLine st [] = (Incomplete, incompleteScore st)
-parseLine st (x:xs)
-  | x `elem` "([<{"   = parseLine (x:st) xs
-  | validPair (s:[x]) = parseLine ss xs
-  | otherwise         = (Corrupted, corruptedScore x)
+parseLine :: String -> (NavigationSystem, Int)
+parseLine l = case foldM p "" l of
+  Left lastChar  -> (Corrupted, corruptedScore lastChar)
+  Right stack    -> (Incomplete, incompleteScore stack)
   where
-    (s:ss) = st
+    p st x
+      | x `elem` "([<{"   = Right (x:st)
+      | validPair (s:[x]) = Right ss
+      | otherwise         = Left x
+      where
+        (s:ss) = st
 
 validPair :: String -> Bool
 validPair = flip elem ["()", "[]", "<>", "{}"]
