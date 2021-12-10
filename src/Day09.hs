@@ -14,16 +14,13 @@ import qualified Data.HashSet as HS
 import Data.List (sortBy)
 
 day09 :: AOCSolution
-day09 input = show <$> ([part1, part2] <*> (pure $ parseGrid2d input))
+day09 input = show <$> ([part1, part2] <*> pure (parseGrid2d input))
 
 getPoints :: Grid2d -> [Point2d]
 getPoints i = [(r, c) | r <- [0..pred rl], c <- [0..pred cl]]
   where
     rl = length i
     cl = length (i ! 0)
-
-getNeighbours :: Point2d -> [Point2d]
-getNeighbours (r, c) = [(pred r, c), (succ r, c), (r, pred c), (r, succ c)]
 
 part1 :: Grid2d -> Int
 part1 i = sum $ map p1 points
@@ -33,7 +30,7 @@ part1 i = sum $ map p1 points
     p1 p = if all (> value) neighbours then succ value else 0
       where
         value = lookupInGrid2d i p
-        neighbours = lookupInGrid2d i <$> getNeighbours p
+        neighbours = lookupInGrid2d i <$> point2dNeighbours p
 
 part2 :: Grid2d -> Int
 part2 i = product $ take 3 $ sortBy (flip compare) $ p2 points []
@@ -53,6 +50,6 @@ findConnectedPoints i (p:s) v = findConnectedPoints i s' v'
   where
     n = filter ((< 9) . lookupInGrid2d i) $
       filter (not . flip HS.member v) $
-      getNeighbours p
+      point2dNeighbours p
     s' = s ++ n
     v' = HS.insert p v

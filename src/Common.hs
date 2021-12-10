@@ -2,6 +2,7 @@ module Common where
 
 import Data.Foldable (toList)
 import Data.Char (digitToInt)
+import Data.List (sort)
 import Data.List.Split (splitOn)
 import Data.Maybe (fromMaybe)
 
@@ -60,3 +61,13 @@ parseGrid2d = V.fromList . map V.fromList . map2 digitToInt . lines
 
 lookupInGrid2d :: Grid2d -> Point2d -> Int
 lookupInGrid2d i (r, c) = fromMaybe 9 $ i !? r >>= flip (!?) c
+
+point2dNeighbours :: Point2d -> [Point2d]
+point2dNeighbours (r, c) = [(pred r, c), (succ r, c), (r, pred c), (r, succ c)]
+
+median :: Ord a => [a] -> [a]
+median x = if odd lx then [xs !! hl] else [xs !! pred hl, xs !! hl]
+  where
+    xs = sort x
+    lx = length xs
+    hl = lx `div` 2
