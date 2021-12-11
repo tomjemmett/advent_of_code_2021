@@ -23,6 +23,7 @@ common shared-properties
         unordered-containers,
         parsec,
         vector,
+        mtl,
         split
     default-extensions:
         FlexibleContexts
