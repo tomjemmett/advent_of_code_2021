@@ -43,13 +43,13 @@ substep g v = if null k then (f, g0) else substep g' (v ++ k)
     -- but remove the items we have already visited this step
     k  = M.keys (M.filter (> 9) g) \\ v
     -- find the neighbours of those found above...
-    n  = concatMap point2dNeighboursDiags k
+    n  = concatMap point2dNeighboursDiags k \\ v
     -- ... and increment their values by one
     g' = foldl (flip $ M.adjust succ) g n
-
+    
     -- if we find no keys in this substep, then we are done.
     -- we need to reset any values that are greater than 9 to 0
-    g0 = M.map (\x -> if x > 9 then 0 else x) g
+    g0 = foldl (flip $ M.adjust $ const 0) g v
     -- and count how many zeroes there are, that is how many flashed
     f  = M.size $ M.filter (== 0) g0
 
