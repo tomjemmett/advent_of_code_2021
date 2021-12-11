@@ -65,6 +65,11 @@ lookupInGrid2d i (r, c) = fromMaybe 9 $ i !? r >>= flip (!?) c
 point2dNeighbours :: Point2d -> [Point2d]
 point2dNeighbours (r, c) = [(pred r, c), (succ r, c), (r, pred c), (r, succ c)]
 
+point2dNeighboursDiags :: Point2d -> [Point2d]
+point2dNeighboursDiags (r, c) = point2dNeighbours (r, c) ++ [
+  (pred r, pred c), (pred r, succ c),
+  (succ r, pred c), (succ r, succ c)]
+
 median :: Ord a => [a] -> [a]
 median x = if odd lx then [xs !! hl] else [xs !! pred hl, xs !! hl]
   where
