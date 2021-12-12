@@ -3,21 +3,20 @@ module Day12 (
 ) where
 
 import Common
-import Data.Char (isLower, toUpper)
+import Data.Char (isLower)
 import Data.Function (on)
 import Data.Graph
-import Data.List (sortBy, groupBy, intercalate)
+import Data.List (sortBy, groupBy)
 import Data.List.Split (splitOn)
 import qualified Data.HashSet as HS
 
 type D12Graph = (Graph, Vertex -> ((), String, [String]), String -> Maybe Vertex)
 
 day12 :: AOCSolution
-day12 input = [show p1, show p2]
+day12 input = go <$> [True, False]
   where
     i = parseInput input
-    p1 = mbfs 0 [("start", HS.singleton "start", True)] i
-    p2 = mbfs 0 [("start", HS.singleton "start", False)] i
+    go b = show $ d12 0 [("start", HS.singleton "start", b)] i
 
 parseInput :: String -> D12Graph
 parseInput = graphFromEdges .
@@ -29,10 +28,10 @@ parseInput = graphFromEdges .
   where
     f [a, b] = filter (\(x, y) -> x /= "end" && y /= "start") [(a, b), (b,a)]
 
-mbfs :: Int -> [(String, HS.HashSet String, Bool)] -> D12Graph -> Int
-mbfs p [] _ = p
-mbfs p (("end", y, _):xs) (g, v, n) = mbfs (succ p) xs (g, v, n)
-mbfs p ((x, y, z):xs) (g, v, n) = mbfs p xs' (g, v, n)
+d12 :: Int -> [(String, HS.HashSet String, Bool)] -> D12Graph -> Int
+d12 p [] _ = p
+d12 p (("end", y, _):xs) (g, v, n) = d12 (succ p) xs (g, v, n)
+d12 p ((x, y, z):xs) (g, v, n) = d12 p xs' (g, v, n)
   where
     previouslyVisited = flip HS.member y
     isBigCave = not . all isLower
