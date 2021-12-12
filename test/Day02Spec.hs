@@ -2,13 +2,12 @@ module Day02Spec ( spec ) where
 
 import SpecHelper
 
-testInput = unlines [
-  "forward 5",
-  "down 5",
-  "forward 8",
-  "up 3",
-  "down 8",
-  "forward 2"]
+testInput = "forward 5\n\
+            \down 5\n\
+            \forward 8\n\
+            \up 3\n\
+            \down 8\n\
+            \forward 2"
 
 spec :: Spec
 spec = describe "Day 02" $ do

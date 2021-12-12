@@ -2,7 +2,16 @@ module Day01Spec ( spec ) where
 
 import SpecHelper
 
-testInput = unlines ["199", "200","208","210","200","207","240","269","260","263"]
+testInput = "199\n\
+            \200\n\
+            \208\n\
+            \210\n\
+            \200\n\
+            \207\n\
+            \240\n\
+            \269\n\
+            \260\n\
+            \263"
 
 spec :: Spec
 spec = describe "Day 01" $ do

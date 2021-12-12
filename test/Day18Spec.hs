@@ -2,7 +2,7 @@ module Day18Spec ( spec ) where
 
 import SpecHelper
 
-testInput = unlines []
+testInput = ""
 
 spec :: Spec
 spec = describe "Day 18" $ do
