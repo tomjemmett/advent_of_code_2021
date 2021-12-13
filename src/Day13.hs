@@ -50,5 +50,4 @@ parseInput input = (a', b')
       P.string "fold along "
       x <- P.oneOf "xy"
       P.char '='
-      d <- number
-      return $ toFoldGrid x d
+      toFoldGrid x <$> number
