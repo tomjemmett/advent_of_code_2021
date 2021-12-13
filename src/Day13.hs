@@ -15,8 +15,7 @@ import Data.List (sortBy, groupBy)
 day13 :: AOCSolution
 day13 input = [show p1, p2]
   where
-    (m, i) = parseInput input
-    x = scanl foldInstructions m i
+    x = uncurry (scanl foldInstructions) $ parseInput input
     p1 = H.size (x !! 1)
     p2 = showOutput $ last x
 
