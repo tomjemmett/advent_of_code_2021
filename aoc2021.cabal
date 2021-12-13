@@ -24,6 +24,7 @@ common shared-properties
         parsec,
         vector,
         mtl,
+        bifunctors,
         split
     default-extensions:
         FlexibleContexts
