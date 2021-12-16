@@ -21,7 +21,7 @@ main = do
   runday day14 "inputs/day14.txt"
   -- ignoring day15 as it runs too slowly!
   -- runday day15 "inputs/day15.txt"
-  -- runday day16 "inputs/day16.txt"
+  runday day16 "inputs/day16.txt"
   -- runday day17 "inputs/day17.txt"
   -- runday day18 "inputs/day18.txt"
   -- runday day19 "inputs/day19.txt"
