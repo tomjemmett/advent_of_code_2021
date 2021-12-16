@@ -25,6 +25,8 @@ common shared-properties
         vector,
         mtl,
         bifunctors,
+        hashable,
+        pqueue,
         split
     default-extensions:
         FlexibleContexts
