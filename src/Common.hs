@@ -76,3 +76,6 @@ median x = if odd lx then [xs !! hl] else [xs !! pred hl, xs !! hl]
     xs = sort x
     lx = length xs
     hl = lx `div` 2
+
+tuplify2 :: [a] -> (a, a)
+tuplify2 [a,b] = (a,b)
