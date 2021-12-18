@@ -3,41 +3,48 @@ module Day15 (
 ) where
 
 import Common
-import Control.Monad (liftM2)
+import Data.Array.Unboxed (UArray, (!), bounds, inRange, listArray)
 import Data.Char (digitToInt)
+import qualified Data.Map.Strict as M
 import qualified Data.PQueue.Prio.Min as PQ
-import qualified Data.HashSet as S
-import qualified Data.Vector as V
-import Data.Vector ((!))
 
-type Graph = V.Vector (V.Vector Int)
+type Node = (Int, Point2d)
+type Grid = UArray Point2d Int
+type PathCosts = M.Map Point2d Int
 
-day15 :: AOCSolution
-day15 input = [show p1, ""]
+day15 :: AOCSolution 
+day15 input = show . d15 . toArray <$> ([id, expandGrid] <*> pure (parseInput input))
+
+parseInput :: String -> [[Int]]
+parseInput = map2 digitToInt . lines
+
+expandGrid :: [[Int]] -> [[Int]]
+expandGrid = concat .
+  take 5 .
+  iterate incrGraph .
+  foldr1 (zipWith (++)) .
+  take 5 .
+  iterate incrGraph
   where
-    i = parseInput input
-    size = length (lines input) - 1
-    p1 = bfs i (size, size) S.empty (PQ.singleton 0 (0, 0))
+    incrGraph = map2 (succ . flip mod 9)
 
-parseInput :: String -> Graph
-parseInput = V.fromList . map V.fromList . map2 digitToInt . lines
-
-inBounds :: Graph -> Point2d -> Bool
-inBounds g (px, py) = px >= 0 && px <= mx && py >= 0 && py <= my
+toArray :: [[Int]] -> Grid
+toArray grid = listArray ((0, 0), (d, d)) (concat grid)
   where
-    mx = pred $ length g
-    my = pred $ length $ g ! 0
+    d = pred $ length grid
 
-bfs :: Graph -> Point2d -> S.HashSet Point2d -> PQ.MinPQueue Int Point2d -> Int
-bfs g t@(tx, ty) v pq
-  | s == t    = d + (g ! tx ! ty) - (g ! 0 ! 0)
-  | otherwise = bfs g t v' pq''
+d15 :: Grid -> Int
+d15 graph = dijkstra t neighbors (PQ.singleton 0 s) (M.singleton s 0)
   where
-    ((d, s@(sx, sy)), pq') = PQ.deleteFindMin pq
-    d' = (g ! sx ! sy) + d
-    n = filter ((not . flip S.member v) <&&> inBounds g) $ point2dNeighbours s
-    pq'' = foldr (uncurry PQ.insert . (d',)) pq' n
-    v' = S.insert s v
+    (s, t) = bounds graph
+    neighbors (r, p) = [(r + graph ! p', p') | p' <- point2dNeighbours p, inRange (s, t) p']
 
-(<&&>) :: (a -> Bool) -> (a -> Bool) -> a -> Bool
-(<&&>) = liftM2 (&&)
+dijkstra :: Point2d -> (Node -> [Node]) -> PQ.MinPQueue Int Point2d -> PathCosts -> Int
+dijkstra target neighbors pq pc
+  | snd n == target = pc M.! target
+  | otherwise = dijkstra target neighbors pq'' pc'
+  where
+    (n, pq') = PQ.deleteFindMin pq
+    ns = filter (\(r, p) -> maybe True (r <) $ M.lookup p pc) $ neighbors n
+    pc' = foldr (uncurry (flip M.insert)) pc ns
+    pq'' = foldr (uncurry PQ.insert) pq' ns
