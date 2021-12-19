@@ -14,6 +14,7 @@ import Text.Parsec.String (Parser)
 
 type AOCSolution = String -> [String]
 type Point2d = (Int, Int)
+type Point3d = (Int, Int, Int)
 type Grid2d = V.Vector (V.Vector Int)
 
 countTrue :: Foldable f => (a -> Bool) -> f a -> Int
@@ -79,3 +80,6 @@ median x = if odd lx then [xs !! hl] else [xs !! pred hl, xs !! hl]
 
 tuplify2 :: [a] -> (a, a)
 tuplify2 [a,b] = (a,b)
+
+tuplify3 :: [a] -> (a, a, a)
+tuplify3 [a,b,c] = (a,b,c)
