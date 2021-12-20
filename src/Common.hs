@@ -2,7 +2,7 @@ module Common where
 
 import Data.Foldable (toList)
 import Data.Char (digitToInt)
-import Data.List (sort)
+import Data.List (sort, sortBy)
 import Data.List.Split (splitOn)
 import Data.Maybe (fromMaybe)
 
@@ -70,6 +70,17 @@ point2dNeighboursDiags :: Point2d -> [Point2d]
 point2dNeighboursDiags (r, c) = point2dNeighbours (r, c) ++ [
   (pred r, pred c), (pred r, succ c),
   (succ r, pred c), (succ r, succ c)]
+
+sortPoint2d :: [Point2d] -> [Point2d]
+sortPoint2d = sortBy comparePoint2d
+
+comparePoint2d :: Point2d -> Point2d -> Ordering
+comparePoint2d (a, b) (c, d)
+      | a < c     = LT
+      | a > c     = GT
+      | b < d     = LT
+      | b > d     = GT
+      | otherwise = EQ
 
 median :: Ord a => [a] -> [a]
 median x = if odd lx then [xs !! hl] else [xs !! pred hl, xs !! hl]

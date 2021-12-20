@@ -17,10 +17,12 @@ day20 :: AOCSolution
 day20 input = show . sum . map snd . M.toList . fst . (!!) imgs <$> [2, 50]
   where
     (iea, img) = parseInput input
-    -- hacky, but for some reason I need to flip the borders on the actual input, but not on the test...
-    border = if M.size img == 25
-      then Nothing
-      else Just 0
+    -- if the algorithm has 0 = '#', then every odd iteration flips everything outside of our "image bounds"
+    -- we handle this case with Just 0, which we can toggle with (1-) <$> border
+    -- otherwise, the infinite points stay as they are, so we always want to use 0, so we can use fromMaybe 0 Nothing
+    border = if head iea == 1
+      then Just 0
+      else Nothing
     imgs = iterate (convolute iea) (img, border)
 
 createImage :: [[Int]] -> Image
@@ -42,8 +44,7 @@ convolute :: ImageEnhancementAlgorithm -> (Image, Maybe Int) -> (Image, Maybe In
 convolute iea (img, border) = (M.fromList ni, (1-) <$> border)
   where
     ky = M.keys img
-    [minX, maxX] = [minimum, maximum] <*> pure (map fst ky)
-    [minY, maxY] = [minimum, maximum] <*> pure (map snd ky)
+    [minX, minY, maxX, maxY] = [minimum, maximum] <*> (flip map ky <$> [fst, snd])
 
     bp =
       ((pred minY,) <$> [pred minX..succ maxX]) ++
@@ -61,17 +62,6 @@ convolutePoint iea img border p = iea !! pv
     pn = sortPoint2d (p:point2dNeighboursDiags p)
     pv = bitsToInt $ map (flip (M.findWithDefault b) img) pn
 
-sortPoint2d :: [Point2d] -> [Point2d]
-sortPoint2d = sortBy comparePoint2d
-
-comparePoint2d :: Point2d -> Point2d -> Ordering
-comparePoint2d (a, b) (c, d)
-      | a < c     = LT
-      | a > c     = GT
-      | b < d     = LT
-      | b > d     = GT
-      | otherwise = EQ
-
 showImg :: Image -> IO ()
 showImg = putStrLn .
   unlines .
@@ -82,5 +72,5 @@ showImg = putStrLn .
   M.toList
   where
     f :: Int -> Char
-    f 0 = '.'
+    f 0 = ' '
     f 1 = '#'
