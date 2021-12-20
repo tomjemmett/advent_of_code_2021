@@ -28,6 +28,7 @@ common shared-properties
         hashable,
         pqueue,
         array,
+        directory,
         split
     default-extensions:
         FlexibleContexts
