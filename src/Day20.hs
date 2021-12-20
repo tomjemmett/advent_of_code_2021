@@ -58,7 +58,7 @@ convolutePoint :: ImageEnhancementAlgorithm -> Image -> Maybe Int -> Point2d -> 
 convolutePoint iea img border p = iea !! pv 
   where
     b  = fromMaybe 0 border 
-    pn = sortPoint2d $ (p:point2dNeighboursDiags p)
+    pn = sortPoint2d (p:point2dNeighboursDiags p)
     pv = bitsToInt $ map (flip (M.findWithDefault b) img) pn
 
 sortPoint2d :: [Point2d] -> [Point2d]
