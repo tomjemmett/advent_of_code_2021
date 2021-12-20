@@ -1,7 +1,6 @@
--- module Day20 (
---    day20
--- ) where
-module Day20 where
+module Day20 (
+   day20
+) where
 
 import Common
 import Control.Arrow (first, second)
