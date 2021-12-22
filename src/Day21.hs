@@ -1,5 +1,5 @@
 module Day21 (
-  day21, parseInput, part1
+  day21
 ) where
 
 import Common
