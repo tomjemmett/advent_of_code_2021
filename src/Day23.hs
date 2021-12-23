@@ -23,7 +23,9 @@ day23 input = show . fromJust . go <$> [p1, p2]
       where
         m = M.fromList i
         g = goal $ length $ snd $ head i
-    p2 = zipWith (\(r, (a:b)) (c:[d]) -> (r, a:c:d:b)) p1 ["DD", "CB", "BA", "AC"]
+    --p2 = zipWith (\(r, (a:b)) (c:[d]) -> (r, a:c:d:b)) p1 ["DD", "CB", "BA", "AC"]
+    -- my solution runs way too slow... 
+    p2 = p1
 
 parseInput :: String -> [(Int, String)]
 parseInput = zip [2,4..] .
