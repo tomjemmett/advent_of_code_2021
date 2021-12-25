@@ -19,6 +19,7 @@ maintainer:         thomas.jemmett@nhs.net
 common shared-properties
     build-depends:
         base ^>=4.15.0.0,
+        array,
         containers,
         unordered-containers,
         parsec,
@@ -31,9 +32,11 @@ common shared-properties
         directory,
         split
     default-extensions:
+        BlockArguments
         FlexibleContexts
         FlexibleInstances
         LambdaCase
+        MultiWayIf
         TypeApplications
         TupleSections
     default-language: Haskell2010
