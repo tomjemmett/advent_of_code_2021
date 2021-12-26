@@ -33,60 +33,21 @@ part1 arr = go (arr, bounds) 1
         (a', _) = step (a, b)
 
 step :: (Seafloor, Bounds) -> (Seafloor, Bounds)
-step = stepSouth . stepEast
+step = step' 'v' . step' '>'
 
-stepEast :: (Seafloor, Bounds) -> (Seafloor, Bounds)
-stepEast (arr, (by, bx)) = (arr', (by, bx))
+step' :: Char -> (Seafloor, Bounds) -> (Seafloor, Bounds)
+step' chr (arr, (by, bx)) = (arr', (bx, by))
   where
     arr' = M.fromList do
       ((y, x), v) <- M.toList arr
 
       let [px, nx] = map (`mod` bx) $ [pred, succ] <*> pure x
           [pv, nv] = map ((arr M.!) . (y, )) [px, nx]
-          v' = if | v == '>' && nv == '.' -> '.'
-                  | v == '.' && pv == '>' -> '>'
+          v' = if | v == chr && nv == '.' -> '.'
+                  | v == '.' && pv == chr -> chr
                   | otherwise             -> v
-
-      return ((y, x), v')
-
-stepSouth :: (Seafloor, Bounds) -> (Seafloor, Bounds)
-stepSouth (arr, (by, bx)) = (arr', (by, bx))
-  where
-    arr' = M.fromList do
-      ((y, x), v) <- M.toList arr
-
-      let [py, ny] = map (`mod` by) $ [pred, succ] <*> pure y
-          [pv, nv] = map ((arr M.!) . (, x)) [py, ny]
-          v' = if | v == 'v' && nv == '.' -> '.'
-                  | v == '.' && pv == 'v' -> 'v'
-                  | otherwise             -> v
-
-      return ((y, x), v')
+      
+      return ((x, y), v')
 
 debug :: (Seafloor, Bounds) -> IO ()
 debug (arr, bounds) = putStrLn $ unlines [[arr M.! (y, x) | x <- [0..pred $ snd bounds]] | y <- [0..pred $ fst bounds]]
-
-testInput = "v...>>.vv>\n\
-            \.vv>>.vv..\n\
-            \>>.>v>...v\n\
-            \>>v>>.>.v.\n\
-            \v>v.vv.v..\n\
-            \>.>>..v...\n\
-            \.vv..>.>v.\n\
-            \v.v..>>v.v\n\
-            \....v..v.>"
-
-i = parseInput testInput
-b = getBounds i
-
-{-
-....>.>v.>
-v.v>.>v.v.
->v>>..>v..
->>v>v>.>.v
-.>v.v...v.
-v>>.>vvv..
-..v...>>..
-vv...>>vv.
->.v.v..v.v
--}
